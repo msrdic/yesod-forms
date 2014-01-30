@@ -1,6 +1,6 @@
-<div .container-fluid>
-  <div .row-fluid>
-    <h1>Welcome to the web service
+<div .container>
+  <div .row>
+    <h1>HKaido
 
   <div .row-fluid>
     <div .span6>

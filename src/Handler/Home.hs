@@ -4,7 +4,8 @@ import Import
 
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ do
-    setTitle "Yesod Web Service Homepage"
+    setTitle "HKaido home page"
     getYesod >>= addScriptEither . urlJqueryJs
-    addStylesheetRemote "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"
+    addStylesheetRemote "bootstrap/css/bootstrap-theme.min.css"
+    addStylesheetRemote "bootstrap/css/bootstrap.min.css"
     $(widgetFile "home")

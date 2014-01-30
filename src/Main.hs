@@ -1,7 +1,5 @@
 import Import
 import Handler.Home
-import Handler.Fib
-import Handler.Markdown
 
 mkYesodDispatch "HKaido" resourcesHKaido
 

@@ -4,16 +4,6 @@ function updateFib() {
     });
 }
 
-function updateMarkdown() {
-    $.ajax("@{MarkdownR}", {
-        data: {"markdown": $("#markdowninput").val()},
-        success: function (o) {
-             $("#markdownoutput").html(o.html);
-        },
-        type: "PUT"
-    });
-}
-
 $(function(){
     updateFib();
     $("#fibinput").change(updateFib);

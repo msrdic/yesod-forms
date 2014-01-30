@@ -17,7 +17,7 @@ function updateMarkdown() {
 $(function(){
     updateFib();
     $("#fibinput").change(updateFib);
-    
+
     updateMarkdown();
     $("#updatemarkdown").click(updateMarkdown);
 })

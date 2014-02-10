@@ -13,4 +13,4 @@ postPersonR = do
     ((result, widget), enctype) <- runFormPost personForm
     case result of
         FormSuccess person -> defaultLayout $(widgetFileReload def "person")
-        --_ -> defaultLayout $(widgetFileReload def "home")
+        _ -> defaultLayout $(widgetFileReload def "home")

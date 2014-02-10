@@ -1,2 +1,2 @@
 /           HomeR       GET
-/static     StaticR     Static getStatic
+/person     PersonR     POST

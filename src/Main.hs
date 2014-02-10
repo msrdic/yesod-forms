@@ -1,7 +1,11 @@
-import Import
-import Handler.Home
+module Main where
 
-mkYesodDispatch "HKaido" resourcesHKaido
+import          Yesod
+import          Yesod.Form.Jquery
+import          Yesod.Default.Util
+
+import          Foundation
+import          Dispatch
 
 main :: IO ()
-main = warpEnv HKaido
+main = warpEnv FormApp

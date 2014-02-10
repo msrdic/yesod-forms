@@ -1,3 +1,4 @@
-<div .container>
-  <div .row>
-    <h1>HKaido
+<p>
+    <form method=post action=@{PersonR} enctype=#{enctype}>
+        ^{widget}
+        <button>Create user

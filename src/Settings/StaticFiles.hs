@@ -1,1 +1,0 @@
-module Settings.StaticFiles where

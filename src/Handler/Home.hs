@@ -1,13 +1,16 @@
 module Handler.Home where
 
-import Import
-import Yesod.Static
+import          Yesod
+import          Yesod.Default.Util
+import          Yesod.Form.Jquery
 
-staticFiles "static"
+import          Data.Default        (def)
 
-handleHomeR :: Handler Html
-handleHomeR = defaultLayout $ do
-    setTitle "HKaido home page"
-    getYesod >>= addScriptEither . urlJqueryJs
-    addStylesheetRemote "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"
-    $(widgetFile "home")
+import          Foundation
+
+getHomeR :: Handler Html
+getHomeR = do
+    (widget, enctype) <- generateFormPost personForm
+    defaultLayout $ do
+        addStylesheetRemote "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"
+        $(widgetFileReload def "home")

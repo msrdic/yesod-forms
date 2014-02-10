@@ -1,18 +1,33 @@
 module Foundation where
 
-import Yesod
-import Yesod.Default.Util
-import Data.Default (def)
-import Yesod.Form.Jquery
+import          Yesod
+import          Yesod.Form.Jquery
+import          Yesod.Default.Util
 
-data HKaido = HKaido
+import          Data.Default        (def)
+import          Data.Text           (Text)
 
-instance Yesod HKaido
+import          Control.Applicative ((<$>), (<*>))
 
-instance YesodJquery HKaido where
+data FormApp = FormApp
+
+instance Yesod FormApp
+
+instance YesodJquery FormApp where
     urlJqueryJs _ = Right "//ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"
 
-instance RenderMessage HKaido FormMessage where
+instance RenderMessage FormApp FormMessage where
     renderMessage _ _ = defaultFormMessage
 
-mkYesodData "HKaido" $(parseRoutesFile "config/routes")
+mkYesodData "FormApp" $(parseRoutesFile "config/routes")
+
+data Person = Person
+    { personName          :: Text
+    , personSurname       :: Text
+    }
+  deriving Show
+
+personForm :: Html -> MForm Handler (FormResult Person, Widget)
+personForm = renderBootstrap $ Person
+    <$> areq textField "Name" Nothing
+    <*> areq textField "Surname" Nothing

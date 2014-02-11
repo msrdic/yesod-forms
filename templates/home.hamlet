@@ -1,4 +1,12 @@
-<p>
-    <form method=post action=@{PersonR} enctype=#{enctype}>
+<div .container>
+    <h1>Persons:
+    $if null persons
+        <h3>no persons
+    $else
+        $forall Entity personId person <- persons
+            <span .name>#{personName person}
+            <span .surname>#{personSurname person}
+<div .container>
+    <form .form-horizontal method=post action=@{PersonR} enctype=#{enctype}>
         ^{widget}
-        <button>Create user
+        <button type=submit .btn .btn-default>Create user

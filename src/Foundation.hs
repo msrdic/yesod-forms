@@ -1,6 +1,6 @@
 module Foundation where
 
-import          Yesod
+import          Yesod hiding (areq, mreq, aopt, mopt, renderBootstrap)
 import          Yesod.Form.Jquery
 import          Yesod.Default.Util
 
@@ -9,7 +9,14 @@ import          Data.Text           (Text)
 
 import          Control.Applicative ((<$>), (<*>))
 
-data FormApp = FormApp
+import          Database.Persist
+import          Database.Persist.TH
+
+import          Database.Persist.Sqlite
+
+import          Form.Bootstrap3
+
+data FormApp = FormApp ConnectionPool
 
 instance Yesod FormApp
 
@@ -19,15 +26,22 @@ instance YesodJquery FormApp where
 instance RenderMessage FormApp FormMessage where
     renderMessage _ _ = defaultFormMessage
 
+instance YesodPersist FormApp where
+    type YesodPersistBackend FormApp = SqlPersistT
+    runDB dbAction = do
+        FormApp connectionPool <- getYesod
+        runSqlPool dbAction connectionPool
+
 mkYesodData "FormApp" $(parseRoutesFile "config/routes")
 
-data Person = Person
-    { personName          :: Text
-    , personSurname       :: Text
-    }
-  deriving Show
+share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
+Person
+    name Text
+    surname Text
+    deriving Show
+|]
 
 personForm :: Html -> MForm Handler (FormResult Person, Widget)
-personForm = renderBootstrap $ Person
+personForm = renderBootstrap defaultFormConfig $ Person
     <$> areq textField "Name" Nothing
     <*> areq textField "Surname" Nothing

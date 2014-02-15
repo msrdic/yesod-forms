@@ -1,20 +1,19 @@
 module Foundation where
 
-import          Yesod hiding (areq, mreq, aopt, mopt, renderBootstrap)
-import          Yesod.Form.Jquery
-import          Yesod.Default.Util
+import              Yesod hiding (renderBootstrap)
+import              Yesod.Form.Jquery
+import              Yesod.Default.Util
 
-import          Data.Default        (def)
-import          Data.Text           (Text)
+import              Data.Default        (def)
+import              Data.Text           (Text)
 
-import          Control.Applicative ((<$>), (<*>))
+import              Control.Applicative ((<$>), (<*>))
 
-import          Database.Persist
-import          Database.Persist.TH
+import              Database.Persist
+import              Database.Persist.TH
+import              Database.Persist.Sqlite
 
-import          Database.Persist.Sqlite
-
-import          Form.Bootstrap3
+import              Form.Bootstrap3
 
 data FormApp = FormApp ConnectionPool
 
@@ -43,5 +42,5 @@ Person
 
 personForm :: Html -> MForm Handler (FormResult Person, Widget)
 personForm = renderBootstrap defaultFormConfig $ Person
-    <$> areq textField "Name" Nothing
-    <*> areq textField "Surname" Nothing
+    <$> areq textField (bootstrapFieldSettings "Name") Nothing
+    <*> areq textField (bootstrapFieldSettings "Surname") Nothing

@@ -66,20 +66,28 @@ renderBootstrap formConfig aform fragment = do
                 $forall view <- views
                     <div .form-group :fvRequired view:.required :not $ fvRequired view:.optional :has $ fvErrors view:.error>
 
-                    $case (form formConfig)
-                        $of BootstrapBasicForm
-                            <label for=#{fvId view}>#{fvLabel view}
-                        $of BootstrapInlineForm
-                            <label .sr-only for=#{fvId view}>#{fvLabel view}
-                        $of BootstrapHorizontalForm containerOffset containerClass labelClass fieldClass
-                            <label .control-label .#{labelClass} for=#{fvId view}>#{fvLabel view}
-                            <div .#{containerOffset} .#{containerClass}>
-
+                        $case (form formConfig)
+                            $of BootstrapBasicForm
+                                <label for=#{fvId view}>#{fvLabel view}
                                 ^{fvInput view}
+                                ^{infoWidget (fvTooltip view) (fvErrors view)}
 
-                            $maybe tt <- fvTooltip view
-                                <span .help-block>#{tt}
-                            $maybe err <- fvErrors view
-                                <span .help-block>#{err}
+                            $of BootstrapInlineForm
+                                <label .sr-only for=#{fvId view}>#{fvLabel view}
+                                ^{fvInput view}
+                                ^{infoWidget (fvTooltip view) (fvErrors view)}
+
+                            $of BootstrapHorizontalForm containerOffset containerClass labelClass fieldClass
+                                <label .control-label .#{labelClass} for=#{fvId view}>#{fvLabel view}
+                                <div .#{containerOffset} .#{containerClass}>
+                                    ^{fvInput view}
+                                    ^{infoWidget (fvTooltip view) (fvErrors view)}
                 |]
     return (res, widget)
+
+infoWidget tt err = [whamlet|
+    $maybe tt <- fvTooltip view
+        <span .help-block>#{tt}
+    $maybe err <- fvErrors view
+       <span .help-block>#{err}
+|]

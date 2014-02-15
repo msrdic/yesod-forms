@@ -1,12 +1,4 @@
 <div .container>
-    <h1>Persons:
-    $if null persons
-        <h3>no persons
-    $else
-        $forall Entity personId person <- persons
-            <span .name>#{personName person}
-            <span .surname>#{personSurname person}
-<div .container>
     <form method=post action=@{PersonR} enctype=#{enctype}>
         ^{widget}
         <button type=submit .btn .btn-default>Create user

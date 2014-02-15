@@ -54,6 +54,13 @@ hConfig = BootstrapFormConfig { form = BootstrapHorizontalForm (ColXs 0) (ColXs 
 iConfig = BootstrapFormConfig { form = BootstrapInlineForm }
 bConfig = BootstrapFormConfig { form = BootstrapBasicForm }
 
+infoWidget tt err = [whamlet|
+    $maybe tt <- fvTooltip view
+        <span .help-block>#{tt}
+    $maybe err <- fvErrors view
+       <span .help-block>#{err}
+|]
+
 renderBootstrap :: Monad m => BootstrapFormConfig -> FormRender m a
 renderBootstrap formConfig aform fragment = do
     (res, views') <- aFormToForm aform
@@ -84,10 +91,3 @@ renderBootstrap formConfig aform fragment = do
                                     ^{infoWidget (fvTooltip view) (fvErrors view)}
                 |]
     return (res, widget)
-
-infoWidget tt err = [whamlet|
-    $maybe tt <- fvTooltip view
-        <span .help-block>#{tt}
-    $maybe err <- fvErrors view
-       <span .help-block>#{err}
-|]

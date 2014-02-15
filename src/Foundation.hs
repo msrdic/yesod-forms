@@ -42,5 +42,5 @@ Person
 
 personForm :: Html -> MForm Handler (FormResult Person, Widget)
 personForm = renderBootstrap defaultFormConfig $ Person
-    <$> areq textField (bootstrapFieldSettings "Name") Nothing
-    <*> areq textField (bootstrapFieldSettings "Surname") Nothing
+    <$> areq textField (bootstrapFieldSettings defaultFormConfig "Name") Nothing
+    <*> areq textField (bootstrapFieldSettings defaultFormConfig "Surname") Nothing

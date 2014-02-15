@@ -1,7 +1,8 @@
-{-# LANGUAGE RecordWildCards #-}
 module Form.Bootstrap3 (renderBootstrap,
                         bootstrapFieldSettings,
-                        defaultFormConfig
+                        hConfig,
+                        bConfig,
+                        iConfig
                         ) where
 
 import              Yesod hiding (renderBootstrap)
@@ -21,16 +22,16 @@ data GridOptions = ColXs Int | ColSm Int | ColMd Int | ColLg Int
 
 instance Show GridOptions where
     show (ColXs 0) = ""
-    show (ColXs columns) = "col-xs-" ++ (show columns)
+    show (ColXs columns) = "col-xs-" ++ show columns
     
     show (ColSm 0) = ""
-    show (ColSm columns) = "col-sm-" ++ (show columns)
+    show (ColSm columns) = "col-sm-" ++ show columns
 
     show (ColMd 0) = ""
-    show (ColMd columns) = "col-md-" ++ (show columns)
+    show (ColMd columns) = "col-md-" ++ show columns
 
     show (ColLg 0) = ""
-    show (ColLg columns) = "col-lg-" ++ (show columns)
+    show (ColLg columns) = "col-lg-" ++ show columns
 
 instance ToMarkup GridOptions where
     toMarkup = toMarkup . show
@@ -43,14 +44,15 @@ bootstrapFieldSettings :: BootstrapFormConfig -> SomeMessage site -> FieldSettin
 bootstrapFieldSettings formConfig msg = FieldSettings msg Nothing Nothing Nothing (attrsFromFormConfig formConfig)
 
 attrsFromFormConfig :: BootstrapFormConfig -> [(Text, Text)]
-attrsFromFormConfig config = [("class", pack.show.field $ form config)]
+attrsFromFormConfig config = [("class",  pack ("form-control " ++ (show . field $ form config)))]
 
 data BootstrapFormConfig = BootstrapFormConfig {
-    form        :: BootstrapForm,
-    version     :: Int
+    form        :: BootstrapForm
     }
 
-defaultFormConfig = BootstrapFormConfig { form = BootstrapHorizontalForm (ColXs 0) (ColXs 7) (ColXs 2) (ColXs 4), version = 3 }
+hConfig = BootstrapFormConfig { form = BootstrapHorizontalForm (ColXs 0) (ColXs 7) (ColXs 2) (ColXs 4) }
+iConfig = BootstrapFormConfig { form = BootstrapInlineForm }
+bConfig = BootstrapFormConfig { form = BootstrapBasicForm }
 
 renderBootstrap :: Monad m => BootstrapFormConfig -> FormRender m a
 renderBootstrap formConfig aform fragment = do
@@ -64,19 +66,20 @@ renderBootstrap formConfig aform fragment = do
                 $forall view <- views
                     <div .form-group :fvRequired view:.required :not $ fvRequired view:.optional :has $ fvErrors view:.error>
 
-                        $case (form formConfig)
-                            $of BootstrapBasicForm
-                                <label for=#{fvId view}>#{fvLabel view}
-                            $of BootstrapInlineForm
-                                <label .sr-only for=#{fvId view}>#{fvLabel view}
-                            $of BootstrapHorizontalForm containerOffset containerClass labelClass fieldClass
-                                <label .control-label .#{labelClass} for=#{fvId view}>#{fvLabel view}
-                                <div .#{containerOffset} .#{containerClass}>
+                    $case (form formConfig)
+                        $of BootstrapBasicForm
+                            <label for=#{fvId view}>#{fvLabel view}
+                        $of BootstrapInlineForm
+                            <label .sr-only for=#{fvId view}>#{fvLabel view}
+                        $of BootstrapHorizontalForm containerOffset containerClass labelClass fieldClass
+                            <label .control-label .#{labelClass} for=#{fvId view}>#{fvLabel view}
+                            <div .#{containerOffset} .#{containerClass}>
 
-                                    ^{fvInput view}
-                                    $maybe tt <- fvTooltip view
-                                        <span .help-block>#{tt}
-                                    $maybe err <- fvErrors view
-                                        <span .help-block>#{err}
+                                ^{fvInput view}
+
+                            $maybe tt <- fvTooltip view
+                                <span .help-block>#{tt}
+                            $maybe err <- fvErrors view
+                                <span .help-block>#{err}
                 |]
     return (res, widget)

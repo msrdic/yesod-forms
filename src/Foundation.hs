@@ -40,7 +40,17 @@ Person
     deriving Show
 |]
 
+personHForm :: Html -> MForm Handler (FormResult Person, Widget)
+personHForm = renderBootstrap hConfig $ Person
+    <$> areq textField (bootstrapFieldSettings hConfig "Name") Nothing
+    <*> areq textField (bootstrapFieldSettings hConfig "Surname") Nothing
+
+personIForm :: Html -> MForm Handler (FormResult Person, Widget)
+personIForm = renderBootstrap iConfig $ Person
+    <$> areq textField (bootstrapFieldSettings iConfig "Name") Nothing
+    <*> areq textField (bootstrapFieldSettings iConfig "Surname") Nothing
+
 personForm :: Html -> MForm Handler (FormResult Person, Widget)
-personForm = renderBootstrap defaultFormConfig $ Person
-    <$> areq textField (bootstrapFieldSettings defaultFormConfig "Name") Nothing
-    <*> areq textField (bootstrapFieldSettings defaultFormConfig "Surname") Nothing
+personForm = renderBootstrap bConfig $ Person
+    <$> areq textField (bootstrapFieldSettings bConfig "Name") Nothing
+    <*> areq textField (bootstrapFieldSettings bConfig "Surname") Nothing

@@ -7,6 +7,6 @@
             <span .name>#{personName person}
             <span .surname>#{personSurname person}
 <div .container>
-    <form .form-horizontal method=post action=@{PersonR} enctype=#{enctype}>
+    <form method=post action=@{PersonR} enctype=#{enctype}>
         ^{widget}
         <button type=submit .btn .btn-default>Create user

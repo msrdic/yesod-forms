@@ -1,0 +1,4 @@
+<div .container>
+    <form .form-horizontal method=post action=@{PersonR} enctype=#{enctype}>
+        ^{widget}
+        <button type=submit .btn .btn-default>Create user

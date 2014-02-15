@@ -1,2 +1,4 @@
 /           HomeR       GET
+/inline     InlineR     GET
+/horiz      HorizR      GET
 /person     PersonR     POST

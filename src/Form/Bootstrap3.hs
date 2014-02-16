@@ -35,6 +35,16 @@ instance Show GridOptions where
     show (ColLg 0) = ""
     show (ColLg columns) = "col-lg-" ++ show columns
 
+toOffset :: GridOptions -> String
+toOffset (ColXs 0) = ""
+toOffset (ColSm 0) = ""
+toOffset (ColMd 0) = ""
+toOffset (ColLg 0) = ""
+toOffset (ColXs columns) = "col-xs-offset-" ++ show columns
+toOffset (ColSm columns) = "col-sm-offset-" ++ show columns
+toOffset (ColMd columns) = "col-md-offset-" ++ show columns
+toOffset (ColLg columns) = "col-lg-offset-" ++ show columns
+
 instance ToMarkup GridOptions where
     toMarkup = toMarkup . show
 
@@ -72,7 +82,7 @@ renderBootstrap formConfig aform fragment = do
                                 ^{helpWidget view}
                               $of BootstrapHorizontalForm containerOffset containerClass labelClass
                                 <label .control-label .#{labelClass} for=#{fvId view}>#{fvLabel view}
-                                <div .#{containerOffset} .#{containerClass}>
+                                <div .#{containerClass}>
                                   ^{fvInput view}
                                 ^{helpWidget view}
 
@@ -80,8 +90,9 @@ renderBootstrap formConfig aform fragment = do
                 |]
     return (res, widget)
 
-submitWidget (BootstrapHorizontalForm containerOffset containerClass labelClass) = [whamlet|
-    <div .#{containerOffset} .#{containerClass}>
+submitWidget (BootstrapFormConfig (BootstrapHorizontalForm containerOffset containerClass labelClass)) = [whamlet|
+<div .form-group>
+    <div .#{toOffset containerOffset} .#{containerClass}>
       <button type=submit .btn .btn-default>Create user
 |]
 submitWidget _ = [whamlet|<button type=submit .btn .btn-default>Create user|]

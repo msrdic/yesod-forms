@@ -40,7 +40,7 @@ Person
     deriving Show
 |]
 
-hConfig = BootstrapFormConfig { form = BootstrapHorizontalForm (ColXs 0) (ColXs 4) (ColXs 2) }
+hConfig = BootstrapFormConfig { form = BootstrapHorizontalForm (ColXs 2) (ColXs 4) (ColXs 2) }
 iConfig = BootstrapFormConfig { form = BootstrapInlineForm }
 bConfig = BootstrapFormConfig { form = BootstrapBasicForm }
 

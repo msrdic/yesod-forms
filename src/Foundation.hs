@@ -1,22 +1,16 @@
 module Foundation where
 
 import           Yesod                   hiding (renderBootstrap)
-import           Yesod.Default.Util
 import           Yesod.Form.Jquery
 
-import           Data.Default            (def)
 import           Data.Text               (Text)
 import           Data.Time               (Day, TimeOfDay (..))
 
 import           Control.Applicative     ((<$>), (<*>))
 
-import           Database.Persist
-import           Database.Persist.Sqlite
-import           Database.Persist.TH
-
 import           Form.Bootstrap3
 
-data FormApp = FormApp ConnectionPool
+data FormApp = FormApp
 
 instance Yesod FormApp
 
@@ -26,40 +20,32 @@ instance YesodJquery FormApp where
 instance RenderMessage FormApp FormMessage where
     renderMessage _ _ = defaultFormMessage
 
-instance YesodPersist FormApp where
-    type YesodPersistBackend FormApp = SqlPersistT
-    runDB dbAction = do
-        FormApp connectionPool <- getYesod
-        runSqlPool dbAction connectionPool
-
 mkYesodData "FormApp" $(parseRoutesFile "config/routes")
 
-share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
-Person
-    name Text
-    surname Text
+data Person = Person { name :: Text, surname :: Text }
     deriving Show
 
-LargeData
-    textField       Text
-    intField        Int
-    doubleField     Double
-    textAreaField   Textarea
-    hiddenField     Text
-    passwordField   Text
-    emailField      Text
-    htmlField       Html
-    dayField        Day
-    timeField       TimeOfDay
-    searchField     Text
-    urlField        Text
-    selectField     Bool
-    checkboxField   Bool
-|]
+data LargeData = LargeData {
+    textField1       :: Text,
+    intField1        :: Int,
+    doubleField1     :: Double,
+    textAreaField1   :: Textarea,
+    hiddenField1     :: Text,
+    passwordField1   :: Text,
+    emailField1      :: Text,
+    htmlField1       :: Html,
+    dayField1        :: Day,
+    timeField1       :: TimeOfDay,
+    searchField1     :: Text,
+    urlField1        :: Text,
+    selectField1     :: Bool,
+    checkboxField1   :: Bool
+    }
 
-hConfig = BootstrapFormConfig { form = BootstrapHorizontalForm (ColXs 2) (ColXs 4) (ColXs 2) }
-iConfig = BootstrapFormConfig { form = BootstrapInlineForm }
-bConfig = BootstrapFormConfig { form = BootstrapBasicForm }
+hConfig = BootstrapFormConfig { form = BootstrapHorizontalForm (ColXs 2) (ColXs 4) (ColXs 2), submit = "Create user" }
+iConfig = BootstrapFormConfig { form = BootstrapInlineForm, submit = "Create user"}
+bConfig = BootstrapFormConfig { form = BootstrapBasicForm, submit = "Create user" }
+largeFormConfig = BootstrapFormConfig { form = BootstrapHorizontalForm (ColXs 2) (ColXs 4) (ColXs 2), submit = "Submit large data" }
 
 bootstrapFieldHelper config label placeholder = bootstrapFieldSettings config label Nothing placeholder Nothing Nothing
 

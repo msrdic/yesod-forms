@@ -4,8 +4,6 @@ import          Yesod
 import          Yesod.Default.Util
 import          Yesod.Form.Jquery
 
-import          Data.Default        (def)
-
 import          Foundation
 
 getHomeR :: Handler Html

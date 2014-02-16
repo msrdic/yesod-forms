@@ -19,7 +19,7 @@
                 ^{horizontalWidget}
 
     <div .jumbotron>
-        <h2>An example of a horizontal form
+        <h2>An example of a large horizontal form
         <div .container>
             <form .form-horizontal method=post action=@{HomeR} enctype=#{enctype}>
                 ^{largeWidget}

@@ -17,3 +17,9 @@
         <div .container>
             <form .form-horizontal method=post action=@{HomeR} enctype=#{enctype}>
                 ^{horizontalWidget}
+
+    <div .jumbotron>
+        <h2>An example of a horizontal form
+        <div .container>
+            <form .form-horizontal method=post action=@{HomeR} enctype=#{enctype}>
+                ^{largeWidget}

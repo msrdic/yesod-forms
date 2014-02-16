@@ -86,11 +86,11 @@ renderBootstrap formConfig aform fragment = do
                                   ^{fvInput view}
                                 ^{helpWidget view}
 
-                        ^{submitWidget formConfig}
+                        ^{submitWidget $ form formConfig}
                 |]
     return (res, widget)
 
-submitWidget (BootstrapFormConfig (BootstrapHorizontalForm containerOffset containerClass labelClass)) = [whamlet|
+submitWidget (BootstrapHorizontalForm containerOffset containerClass labelClass) = [whamlet|
 <div .form-group>
     <div .#{toOffset containerOffset} .#{containerClass}>
       <button type=submit .btn .btn-default>Create user

@@ -1,8 +1,8 @@
 module Form.Bootstrap3 (renderBootstrap,
                         bootstrapFieldSettings,
-                        hConfig,
-                        bConfig,
-                        iConfig
+                        BootstrapFormConfig (BootstrapFormConfig, form),
+                        GridOptions (ColXs, ColSm, ColMd, ColLg),
+                        BootstrapForm (BootstrapBasicForm, BootstrapInlineForm, BootstrapHorizontalForm)
                         ) where
 
 import              Yesod hiding (renderBootstrap)
@@ -18,12 +18,14 @@ import qualified    Data.Map as Map
 
 import              Text.Blaze.Html
 
+import              Text.Shakespeare.I18N
+
 data GridOptions = ColXs Int | ColSm Int | ColMd Int | ColLg Int
 
 instance Show GridOptions where
     show (ColXs 0) = ""
     show (ColXs columns) = "col-xs-" ++ show columns
-    
+
     show (ColSm 0) = ""
     show (ColSm columns) = "col-sm-" ++ show columns
 
@@ -36,30 +38,18 @@ instance Show GridOptions where
 instance ToMarkup GridOptions where
     toMarkup = toMarkup . show
 
-data BootstrapForm = BootstrapBasicForm
-    | BootstrapInlineForm
-    | BootstrapHorizontalForm { containerOffset :: GridOptions, container :: GridOptions, label :: GridOptions, field :: GridOptions }
+data BootstrapForm = BootstrapBasicForm | BootstrapInlineForm
+    | BootstrapHorizontalForm { containerOffset :: GridOptions, container :: GridOptions, label :: GridOptions }
 
-bootstrapFieldSettings :: BootstrapFormConfig -> SomeMessage site -> FieldSettings site
-bootstrapFieldSettings formConfig msg = FieldSettings msg Nothing Nothing Nothing (attrsFromFormConfig formConfig)
+data BootstrapFormConfig = BootstrapFormConfig { form :: BootstrapForm }
 
-attrsFromFormConfig :: BootstrapFormConfig -> [(Text, Text)]
-attrsFromFormConfig config = [("class",  pack ("form-control " ++ (show . field $ form config)))]
+-- | Use a tooltip as a placeholder
+bootstrapFieldSettings :: BootstrapFormConfig -> SomeMessage site -> Maybe (SomeMessage site) -> Maybe Text -> Maybe Text -> Maybe Text -> FieldSettings site
+bootstrapFieldSettings formConfig msg tooltip placeholder id name = FieldSettings msg tooltip id name (attrsFromFormConfig formConfig placeholder)
 
-data BootstrapFormConfig = BootstrapFormConfig {
-    form        :: BootstrapForm
-    }
-
-hConfig = BootstrapFormConfig { form = BootstrapHorizontalForm (ColXs 0) (ColXs 7) (ColXs 2) (ColXs 4) }
-iConfig = BootstrapFormConfig { form = BootstrapInlineForm }
-bConfig = BootstrapFormConfig { form = BootstrapBasicForm }
-
-infoWidget tt err = [whamlet|
-    $maybe tt <- fvTooltip view
-        <span .help-block>#{tt}
-    $maybe err <- fvErrors view
-       <span .help-block>#{err}
-|]
+attrsFromFormConfig :: BootstrapFormConfig -> Maybe Text -> [(Text, Text)]
+attrsFromFormConfig _ Nothing = [("class", "form-control")]
+attrsFromFormConfig _ (Just placeholder) = [("class", "form-control"), ("placeholder", placeholder)]
 
 renderBootstrap :: Monad m => BootstrapFormConfig -> FormRender m a
 renderBootstrap formConfig aform fragment = do
@@ -67,27 +57,38 @@ renderBootstrap formConfig aform fragment = do
     let views = views' []
         has (Just _) = True
         has Nothing  = False
-    let widget = [whamlet|
-                $newline never
-                \#{fragment}
-                $forall view <- views
-                    <div .form-group :fvRequired view:.required :not $ fvRequired view:.optional :has $ fvErrors view:.error>
-
-                        $case (form formConfig)
-                            $of BootstrapBasicForm
+        widget = [whamlet|
+                        \#{fragment}
+                        $forall view <- views
+                          <div .form-group :fvRequired view:.required :not $ fvRequired view:.optional :has $ fvErrors view:.error>
+                            $case (form formConfig)
+                              $of BootstrapBasicForm
                                 <label for=#{fvId view}>#{fvLabel view}
                                 ^{fvInput view}
-                                ^{infoWidget (fvTooltip view) (fvErrors view)}
-
-                            $of BootstrapInlineForm
+                                ^{helpWidget view}
+                              $of BootstrapInlineForm
                                 <label .sr-only for=#{fvId view}>#{fvLabel view}
                                 ^{fvInput view}
-                                ^{infoWidget (fvTooltip view) (fvErrors view)}
-
-                            $of BootstrapHorizontalForm containerOffset containerClass labelClass fieldClass
+                                ^{helpWidget view}
+                              $of BootstrapHorizontalForm containerOffset containerClass labelClass
                                 <label .control-label .#{labelClass} for=#{fvId view}>#{fvLabel view}
                                 <div .#{containerOffset} .#{containerClass}>
-                                    ^{fvInput view}
-                                    ^{infoWidget (fvTooltip view) (fvErrors view)}
+                                  ^{fvInput view}
+                                ^{helpWidget view}
+
+                        ^{submitWidget formConfig}
                 |]
     return (res, widget)
+
+submitWidget (BootstrapHorizontalForm containerOffset containerClass labelClass) = [whamlet|
+    <div .#{containerOffset} .#{containerClass}>
+      <button type=submit .btn .btn-default>Create user
+|]
+submitWidget _ = [whamlet|<button type=submit .btn .btn-default>Create user|]
+
+helpWidget view = [whamlet|
+    $maybe tt <- fvTooltip view
+      <span .help-block>#{tt}
+    $maybe err <- fvErrors view
+      <span .help-block>#{err}
+|]

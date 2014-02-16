@@ -1,4 +1,16 @@
+<h1>Bootstrap 3 forms demo
+
 <div .container>
-    <form method=post action=@{PersonR} enctype=#{enctype}>
-        ^{widget}
-        <button type=submit .btn .btn-default>Create user
+    <p>An example of a basic form
+    <form method=post action=@{HomeR} enctype=#{enctype}>
+        ^{basicWidget}
+
+<div .container>
+    <p>An example of an inline form
+    <form .form-inline method=post action=@{HomeR} enctype=#{enctype}>
+        ^{inlineWidget}
+
+<div .container>
+    <p>An example of a horizontal form
+    <form .form-horizontal method=post action=@{HomeR} enctype=#{enctype}>
+        ^{horizontalWidget}

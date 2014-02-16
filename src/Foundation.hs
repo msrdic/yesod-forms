@@ -40,17 +40,21 @@ Person
     deriving Show
 |]
 
+hConfig = BootstrapFormConfig { form = BootstrapHorizontalForm (ColXs 0) (ColXs 4) (ColXs 2) }
+iConfig = BootstrapFormConfig { form = BootstrapInlineForm }
+bConfig = BootstrapFormConfig { form = BootstrapBasicForm }
+
 personHForm :: Html -> MForm Handler (FormResult Person, Widget)
 personHForm = renderBootstrap hConfig $ Person
-    <$> areq textField (bootstrapFieldSettings hConfig "Name") Nothing
-    <*> areq textField (bootstrapFieldSettings hConfig "Surname") Nothing
+    <$> areq textField (bootstrapFieldSettings hConfig "Name" Nothing (Just "Person name") Nothing Nothing) Nothing
+    <*> areq textField (bootstrapFieldSettings hConfig "Surname" Nothing (Just "Person surname") Nothing Nothing) Nothing
 
 personIForm :: Html -> MForm Handler (FormResult Person, Widget)
 personIForm = renderBootstrap iConfig $ Person
-    <$> areq textField (bootstrapFieldSettings iConfig "Name") Nothing
-    <*> areq textField (bootstrapFieldSettings iConfig "Surname") Nothing
+    <$> areq textField (bootstrapFieldSettings iConfig "Name" Nothing (Just "Person name") Nothing Nothing) Nothing
+    <*> areq textField (bootstrapFieldSettings iConfig "Surname" Nothing (Just "Person surname") Nothing Nothing) Nothing
 
 personForm :: Html -> MForm Handler (FormResult Person, Widget)
 personForm = renderBootstrap bConfig $ Person
-    <$> areq textField (bootstrapFieldSettings bConfig "Name") Nothing
-    <*> areq textField (bootstrapFieldSettings bConfig "Surname") Nothing
+    <$> areq textField (bootstrapFieldSettings bConfig "Name" Nothing (Just "Person name") Nothing Nothing) Nothing
+    <*> areq textField (bootstrapFieldSettings bConfig "Surname" Nothing (Just "Person surname") Nothing Nothing) Nothing

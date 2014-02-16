@@ -10,7 +10,9 @@ import          Foundation
 
 getHomeR :: Handler Html
 getHomeR = do
-    (widget, enctype) <- generateFormPost personForm
+    (basicWidget, enctype) <- generateFormPost personForm
+    (inlineWidget, enctype) <- generateFormPost personIForm
+    (horizontalWidget, enctype) <- generateFormPost personHForm
     defaultLayout $ do
         addStylesheetRemote "//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"
         $(widgetFileReload def "home")

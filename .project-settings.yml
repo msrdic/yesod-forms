@@ -4,12 +4,9 @@ module-template: ! 'module MODULE_NAME where
 extensions:
   TemplateHaskell: true
   OverloadedStrings: true
-  GADTs: true
   QuasiQuotes: true
   TypeFamilies: true
-  DeriveDataTypeable: true
   MultiParamTypeClasses: true
-  FlexibleContexts: true
 environment: ghc-7.4.2-stable-13.09
 cabal-file: project.cabal
 hidden-packages: ''

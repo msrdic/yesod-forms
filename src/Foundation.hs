@@ -65,7 +65,7 @@ personForm = renderBootstrap bConfig $ Person
     <*> areq textField (bootstrapFieldHelper bConfig "Surname" (Just "Person surname")) Nothing
 
 largeDataForm :: Html -> MForm Handler (FormResult LargeData, Widget)
-largeDataForm = renderBootstrap hConfig $ LargeData
+largeDataForm = renderBootstrap largeFormConfig $ LargeData
     <$> areq textField (bootstrapFieldHelper hConfig "Text" (Just "Some text content")) Nothing
     <*> areq intField (bootstrapFieldHelper hConfig "Int" (Just "Some integer value")) Nothing
     <*> areq doubleField (bootstrapFieldHelper hConfig "Double" (Just "Some double value")) Nothing

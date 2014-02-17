@@ -1,8 +1,8 @@
 module Form.Bootstrap3 (renderBootstrap,
                         bootstrapFieldSettings,
-                        BootstrapFormConfig (BootstrapFormConfig, form, submit),
-                        GridOptions (ColXs, ColSm, ColMd, ColLg),
-                        BootstrapForm (BootstrapBasicForm, BootstrapInlineForm, BootstrapHorizontalForm)
+                        BootstrapFormConfig (..),
+                        GridOptions (..),
+                        BootstrapForm (..)
                         ) where
 
 import              Yesod hiding (renderBootstrap)
@@ -89,7 +89,7 @@ submitWidget (BootstrapFormConfig (BootstrapHorizontalForm containerOffset conta
     <div .#{toOffset containerOffset} .#{containerClass}>
       <button type=submit .btn .btn-default>#{submit}
 |]
-submitWidget _ = [whamlet|<button type=submit .btn .btn-default>Create user|]
+submitWidget (BootstrapFormConfig _ submit) = [whamlet|<button type=submit .btn .btn-default>#{submit}|]
 
 helpWidget view = [whamlet|
     $maybe tt <- fvTooltip view
